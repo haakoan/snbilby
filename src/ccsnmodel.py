@@ -86,7 +86,7 @@ def mode_2g3(M_shock, R_shock, P_c, rho_c):
     d = 0
     return a + b * x + c * x**2 + d * x**3
 
-def custom_source_model(f, duration, sampling_rate, modes_to_include, A, k, x0, B, C, alpha, mu, sigma, beta, gamma, 
+def ccsn_model(f, duration, sampling_rate, modes_to_include, A, k, x0, B, C, alpha, mu, sigma, beta, gamma, 
                         a1, b1, a2, b2, a3, b3, a4, b4):
     # Create the time array
     time = np.linspace(0, duration, int(duration * sampling_rate))
@@ -132,6 +132,5 @@ def custom_source_model(f, duration, sampling_rate, modes_to_include, A, k, x0, 
     interpolated_signal = np.interp(f, frequency_array, frequency_domain_signal, left=0, right=0)
     
     # Return the interpolated value(s)
-    return interpolated_signal
+    return {"plus": interpolated_signal, "cross": interpolated_signal}
     
-    return frequency_domain_signal, frequency_array
