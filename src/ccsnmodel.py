@@ -87,7 +87,8 @@ def mode_2g3(M_shock, R_shock, P_c, rho_c):
     return a + b * x + c * x**2 + d * x**3
 
 def ccsn_model(f, duration, sampling_rate, modes_to_include, A, k, x0, B, C, alpha, mu, sigma, beta, gamma, 
-                        a1, b1, a2, b2, a3, b3, a4, b4):
+                        a1, b1, a2, b2, a3, b3, a4, b4,phase_sigma,
+                        A1=1,A2=1,A3=1,A4=1,A5=1,A6=1,A7=1):
     # Create the time array
     time = np.linspace(0, duration, int(duration * sampling_rate))
     
@@ -105,25 +106,26 @@ def ccsn_model(f, duration, sampling_rate, modes_to_include, A, k, x0, B, C, alp
     # Compute each mode if included and add to the combined signal
     if 'f_2' in modes_to_include:
         freq_f_2 = mode_2f(M_sh, R_sh)
-        combined_signal += np.sin(2 * np.pi * freq_f_2 * time)
+        combined_signal += A1*np.sin(2 * np.pi * np.random.normal(freq_f_2,phase_sigma)*time)
     if 'p1_2' in modes_to_include:
         freq_p1_2 = mode_2p1(M_sh, R_sh)
-        combined_signal += np.sin(2 * np.pi * freq_p1_2 * time)
+        combined_signal += A2*np.sin(2 * np.pi * np.random.normal(freq_p1_2,phase_sigma)*time)
     if 'p2_2' in modes_to_include:
         freq_p2_2 = mode_2p2(M_sh, R_sh)
-        combined_signal += np.sin(2 * np.pi * freq_p2_2 * time)
+        combined_signal += A3*np.sin(2 * np.pi * np.random.normal(freq_p2_2,phase_sigma)*time)
     if 'p3_2' in modes_to_include:
         freq_p3_2 = mode_2p3(M_sh, R_sh)
-        combined_signal += np.sin(2 * np.pi * freq_p3_2 * time)
+        combined_signal += A4*np.sin(2 * np.pi * np.random.normal(freq_p3_2,phase_sigma)*time)
     if 'g1_2' in modes_to_include:
         freq_g1_2 = mode_2g1(M_PNS, R_PNS)
-        combined_signal += np.sin(2 * np.pi * freq_g1_2 * time)
+        combined_signal += A5*np.sin(2 * np.pi * np.random.normal(freq_g1_2,phase_sigma)*time)
     if 'g2_2' in modes_to_include:
         freq_g2_2 = mode_2g2(M_PNS, R_PNS)
-        combined_signal += np.sin(2 * np.pi * freq_g2_2 * time)
+        combined_signal += A6*np.sin(2 * np.pi * np.random.normal(freq_g2_2,phase_sigma)*time)
     if 'g3_2' in modes_to_include:
         freq_g3_2 = mode_2g3(M_sh, R_sh, P_c_val, rho_c_val)
-        combined_signal += np.sin(2 * np.pi * freq_g3_2 * time)
+        combined_signal += A7*np.sin(2 * np.pi * np.random.normal(freq_g3_2,phase_sigma)*time)
+
     
     # Convert the time-domain signal to the frequency domain using Bilby's FFT
     frequency_domain_signal, frequency_array = bilby.core.utils.series.nfft(combined_signal, sampling_rate)
